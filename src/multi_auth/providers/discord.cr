@@ -46,7 +46,7 @@ class MultiAuth::Provider::Discord < MultiAuth::Provider
     end
   end
 
-  def user(params : Hash(String, String))
+  def user(params : Hash(String, String), code_verifier : String? = nil) : User
     client = OAuth2::Client.new(
       "discord.com",
       key,

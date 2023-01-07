@@ -9,7 +9,7 @@ abstract class MultiAuth::Provider
     authorize_uri(scope, state) { }
   end
 
-  abstract def user(params : Hash(String, String))
+  abstract def user(params : Hash(String, String), code_verifier : String? = nil) : User
 
   def initialize(@redirect_uri : String, @key : String, @secret : String)
   end

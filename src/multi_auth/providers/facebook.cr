@@ -4,7 +4,7 @@ class MultiAuth::Provider::Facebook < MultiAuth::Provider
     client.get_authorize_uri(scope, state, &block)
   end
 
-  def user(params : Hash(String, String))
+  def user(params : Hash(String, String), code_verifier : String? = nil) : User
     fb_user = fetch_fb_user(params["code"])
 
     user = User.new(

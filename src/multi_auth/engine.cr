@@ -27,7 +27,7 @@ class MultiAuth::Engine
     provider.authorize_uri(scope, state)
   end
 
-  def user(params : Enumerable({String, String})) : User
+  def user(params : Enumerable({String, String}), code_verifier : String? = nil) : User
     provider.user(params.to_h)
   end
 end

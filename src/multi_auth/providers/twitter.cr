@@ -4,7 +4,7 @@ class MultiAuth::Provider::Twitter < MultiAuth::Provider
     consumer.get_authorize_uri(request_token, redirect_uri, &block)
   end
 
-  def user(params : Hash(String, String))
+  def user(params : Hash(String, String), code_verifier : String? = nil) : User
     tw_user = fetch_tw_user(params["oauth_token"], params["oauth_verifier"])
 
     user = User.new(

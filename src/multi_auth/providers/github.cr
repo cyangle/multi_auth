@@ -4,8 +4,8 @@ class MultiAuth::Provider::Github < MultiAuth::Provider
     client.get_authorize_uri(scope, state, &block)
   end
 
-  def user(params : Hash(String, String))
-    gh_user = fetch_gh_user(params["code"])
+  def user(params : Hash(String, String), code_verifier : String? = nil) : User
+    gh_user = fetch_gh_user(params["code"], code_verifier)
 
     user = User.new(
       "github",
@@ -48,8 +48,8 @@ class MultiAuth::Provider::Github < MultiAuth::Provider
     property html_url : String?
   end
 
-  private def fetch_gh_user(code)
-    access_token = client.get_access_token_using_authorization_code(code)
+  private def fetch_gh_user(code, code_verifier : String? = nil)
+    access_token = client.get_access_token_using_authorization_code_with_pkce(code, code_verifier)
 
     api = HTTP::Client.new("api.github.com", tls: true)
     access_token.authenticate(api)
@@ -70,5 +70,16 @@ class MultiAuth::Provider::Github < MultiAuth::Provider
       token_uri: "/login/oauth/access_token",
       auth_scheme: :request_body
     )
+  end
+end
+
+class OAuth2::Client
+  def get_access_token_using_authorization_code_with_pkce(authorization_code : String, code_verifier : String? = nil) : AccessToken
+    get_access_token do |form|
+      form.add("redirect_uri", @redirect_uri)
+      form.add("grant_type", "authorization_code")
+      form.add("code", authorization_code)
+      form.add("code_verifier", code_verifier.not_nil!) unless code_verifier.nil?
+    end
   end
 end

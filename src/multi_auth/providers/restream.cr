@@ -6,7 +6,7 @@ class MultiAuth::Provider::Restream < MultiAuth::Provider
     uri = client.get_authorize_uri(scope, state, &block)
   end
 
-  def user(params : Hash(String, String))
+  def user(params : Hash(String, String), code_verifier : String? = nil) : User
     rs_user = fetch_rs_user(params["code"])
 
     user = User.new(
