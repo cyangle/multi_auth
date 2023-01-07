@@ -1,5 +1,5 @@
 class MultiAuth::Provider::Google < MultiAuth::Provider
-  def authorize_uri(scope = nil, state = nil)
+  def authorize_uri(scope = nil, state = nil, &block : URI::Params::Builder ->) : String
     defaults = [
       "https://www.googleapis.com/auth/user.emails.read",
       "https://www.googleapis.com/auth/user.phonenumbers.read",
@@ -18,7 +18,7 @@ class MultiAuth::Provider::Google < MultiAuth::Provider
       redirect_uri: redirect_uri
     )
 
-    client.get_authorize_uri(scope, state)
+    client.get_authorize_uri(scope, state, &block)
   end
 
   def user(params : Hash(String, String))

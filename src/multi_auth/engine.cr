@@ -19,7 +19,11 @@ class MultiAuth::Engine
 
   getter provider : Provider
 
-  def authorize_uri(scope = nil, state = nil)
+  def authorize_uri(scope = nil, state = nil, &block : URI::Params::Builder ->) : String
+    provider.authorize_uri(scope, state, &block)
+  end
+
+  def authorize_uri(scope = nil, state = nil) : String
     provider.authorize_uri(scope, state)
   end
 

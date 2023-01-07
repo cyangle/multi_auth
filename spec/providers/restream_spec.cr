@@ -11,6 +11,14 @@ describe MultiAuth::Provider::Restream do
     uri.should start_with("https://api.restream.io/login?client_id=restream_id&redirect_uri=%2Fcallback&response_type=code&state=random_state_value")
   end
 
+  it "generates authorize_uri with pkce params" do
+    uri = MultiAuth.make("restream", "/callback").authorize_uri(state: "random_state_value") do |form|
+      form.add "code_challenge", "code_challenge_value"
+      form.add "code_challenge_method", "S256"
+    end
+    uri.should start_with("https://api.restream.io/login?client_id=restream_id&redirect_uri=%2Fcallback&response_type=code&state=random_state_value")
+  end
+
   it "fetch user" do
     WebMock.wrap do
       WebMock.stub(:post, "https://api.restream.io/oauth/token")

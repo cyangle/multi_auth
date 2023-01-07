@@ -11,6 +11,14 @@ describe MultiAuth::Provider::Facebook do
     uri.should eq("https://www.facebook.com/v2.9/dialog/oauth?client_id=facebook_id&redirect_uri=%2Fcallback&response_type=code&scope=email&state=random_state_value")
   end
 
+  it "generates authorize_uri with pkce params" do
+    uri = MultiAuth.make("facebook", "/callback").authorize_uri(state: "random_state_value") do |form|
+      form.add "code_challenge", "code_challenge_value"
+      form.add "code_challenge_method", "S256"
+    end
+    uri.should eq("https://www.facebook.com/v2.9/dialog/oauth?client_id=facebook_id&redirect_uri=%2Fcallback&response_type=code&scope=email&state=random_state_value&code_challenge=code_challenge_value&code_challenge_method=S256")
+  end
+
   it "fetch user" do
     WebMock.wrap do
       WebMock

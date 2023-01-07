@@ -1,7 +1,7 @@
 class MultiAuth::Provider::Facebook < MultiAuth::Provider
-  def authorize_uri(scope = nil, state = nil)
+  def authorize_uri(scope = nil, state = nil, &block : URI::Params::Builder ->) : String
     scope ||= "email"
-    client.get_authorize_uri(scope, state)
+    client.get_authorize_uri(scope, state, &block)
   end
 
   def user(params : Hash(String, String))

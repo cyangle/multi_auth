@@ -1,9 +1,9 @@
 require "uuid"
 
 class MultiAuth::Provider::Restream < MultiAuth::Provider
-  def authorize_uri(scope = nil, state = nil)
+  def authorize_uri(scope = nil, state = nil, &block : URI::Params::Builder ->) : String
     state ||= UUID.random.to_s
-    uri = client.get_authorize_uri(scope, state)
+    uri = client.get_authorize_uri(scope, state, &block)
   end
 
   def user(params : Hash(String, String))

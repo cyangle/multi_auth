@@ -1,7 +1,7 @@
 class MultiAuth::Provider::Twitter < MultiAuth::Provider
-  def authorize_uri(scope = nil, state = nil)
+  def authorize_uri(scope = nil, state = nil, &block : URI::Params::Builder ->) : String
     request_token = consumer.get_request_token(redirect_uri)
-    consumer.get_authorize_uri(request_token, redirect_uri)
+    consumer.get_authorize_uri(request_token, redirect_uri, &block)
   end
 
   def user(params : Hash(String, String))
