@@ -31,7 +31,7 @@ class MultiAuth::Provider::Google < MultiAuth::Provider
       auth_scheme: :request_body
     )
 
-    access_token = client.get_access_token_using_authorization_code(params["code"], code_verifier)
+    access_token = client.get_access_token_using_authorization_code_with_pkce(params["code"], code_verifier)
 
     # https://developers.google.com/people/api/rest/v1/people/get
     # enable Google People API

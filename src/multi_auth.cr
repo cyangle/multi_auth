@@ -1,5 +1,6 @@
 require "oauth"
 require "oauth2"
+require "./ext/client"
 require "./multi_auth/**"
 
 module MultiAuth
