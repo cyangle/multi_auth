@@ -28,6 +28,6 @@ class MultiAuth::Engine
   end
 
   def user(params : Enumerable({String, String}), code_verifier : String? = nil) : User
-    provider.user(params.to_h)
+    provider.user(params.to_h, code_verifier)
   end
 end
